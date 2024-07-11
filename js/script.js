@@ -37,3 +37,28 @@ images.forEach((item, index) => {
 
     carousel.appendChild(carouselItem);
 });
+let currentIndex = 0;
+
+const updateCarousel = () => {
+    const items = document.querySelectorAll('.carousel-item');
+    items.forEach((item, index) => {
+        item.classList.remove('active');
+        if (index === currentIndex) item.classList.add('active');
+    });
+};
+
+document.getElementById('next').addEventListener('click', () => {
+    currentIndex++;
+    if (currentIndex >= images.length) {
+        currentIndex = 0;
+    }
+    updateCarousel();
+});
+
+document.getElementById('prev').addEventListener('click', () => {
+    currentIndex--;
+    if (currentIndex < 0) {
+        currentIndex = images.length - 1;
+    }
+    updateCarousel();
+});
