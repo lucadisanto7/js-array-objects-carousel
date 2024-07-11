@@ -21,29 +21,35 @@ const images = [
         text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.',
     }
 ];
+const mainImg = document.getElementById('main-img');
+const mainTitle = document.getElementById('main-title');
+const mainText = document.getElementById('main-text');
+const thumbnails = document.querySelector('.thumbnails');
 
-const carousel = document.getElementById('carousel');
-
-images.forEach((item, index) => {
-    const carouselItem = document.createElement('div');
-    carouselItem.className = 'carousel-item';
-    if (index === 0) carouselItem.classList.add('active');
-
-    carouselItem.innerHTML = `
-        <img src="${item.image}" alt="${item.title}">
-        <h2>${item.title}</h2>
-        <p>${item.text}</p>
-    `;
-
-    carousel.appendChild(carouselItem);
-});
 let currentIndex = 0;
 
-const updateCarousel = () => {
-    const items = document.querySelectorAll('.carousel-item');
-    items.forEach((item, index) => {
-        item.classList.remove('active');
-        if (index === currentIndex) item.classList.add('active');
+const updateMainImage = () => {
+    const { image, title, text } = images[currentIndex];
+    mainImg.src = image;
+    mainImg.alt = title;
+    mainTitle.textContent = title;
+    mainText.textContent = text;
+};
+
+const createThumbnails = () => {
+    images.forEach((item, index) => {
+        const thumbnailItem = document.createElement('div');
+        thumbnailItem.className = 'thumbnail-item';
+        if (index === currentIndex) thumbnailItem.classList.add('active');
+
+        thumbnailItem.innerHTML = `<img src="${item.image}" alt="${item.title}">`;
+
+        thumbnailItem.addEventListener('click', () => {
+            currentIndex = index;
+            updateMainImage();
+        });
+
+        thumbnails.appendChild(thumbnailItem);
     });
 };
 
@@ -52,7 +58,7 @@ document.getElementById('next').addEventListener('click', () => {
     if (currentIndex >= images.length) {
         currentIndex = 0;
     }
-    updateCarousel();
+    updateMainImage();
 });
 
 document.getElementById('prev').addEventListener('click', () => {
@@ -60,5 +66,9 @@ document.getElementById('prev').addEventListener('click', () => {
     if (currentIndex < 0) {
         currentIndex = images.length - 1;
     }
-    updateCarousel();
+    updateMainImage();
 });
+
+// Initialize thumbnails and main image
+createThumbnails();
+updateMainImage();
